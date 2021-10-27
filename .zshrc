@@ -2,7 +2,7 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH="/Users/adinapoli/.oh-my-zsh"
+export ZSH="~/.oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -21,7 +21,7 @@ ZSH_THEME="bullet-train"
 
 # Uncomment the following line to use hyphen-insensitive completion.
 # Case-sensitive completion must be off. _ and - will be interchangeable.
-# HYPHEN_INSENSITIVE="true"
+HYPHEN_INSENSITIVE="true"
 
 # Uncomment the following line to disable bi-weekly auto-update checks.
 # DISABLE_AUTO_UPDATE="true"
@@ -62,7 +62,7 @@ ZSH_THEME="bullet-train"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git zsh-syntax-highlighting)
+plugins=(git zsh-syntax-highlighting osx docker colored-man-pages emoji iterm2 vscode)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -74,11 +74,11 @@ source $ZSH/oh-my-zsh.sh
 # export LANG=en_US.UTF-8
 
 # Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
+if [[ -n $SSH_CONNECTION ]]; then
+  export EDITOR='vim'
+else
+  export EDITOR='code -w'
+fi
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
@@ -91,9 +91,8 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-. /Users/adinapoli/EnvZ/bootstrap
 
-export PATH=~/Library/Python/3.7/bin:$PATHexport PATH=$HOME/bin:$PATH
+export PATH=~/Library/Python/3.9/bin:$PATHexport PATH=$HOME/bin:$PATH
 #export PATH=~/Library/Python/2.7/bin:$PATHexport PATH=$HOME/bin:$PATH
 
 BULLETTRAIN_PROMPT_ORDER=(
@@ -121,17 +120,56 @@ BULLETTRAIN_VIRTUALENV_FG=black
 
 
 source <(kubectl completion zsh)
-export PATH="/usr/local/opt/curl-openssl/bin:$PATH"
-export LDFLAGS="-L/usr/local/opt/curl-openssl/lib"
-export CPPFLAGS="-I/usr/local/opt/curl-openssl/include"
-export LDFLAGS="-L/usr/local/opt/openssl/lib"
-export CPPFLAGS="-I/usr/local/opt/openssl/include"
-export PKG_CONFIG_PATH="/usr/local/opt/openssl/lib/pkgconfig"
 
-alias useKube8='asdf global kubectl 1.8.9'
+export NVM_DIR=~/.nvm
+. $(brew --prefix nvm)/nvm.sh
 
-alias useKube12='asdf global kubectl 1.12.7'
 
-. $HOME/.asdf/asdf.sh
+# grep with colours by default
+# Arguments: $@ -> what to match
+function grep()
+{
+    /usr/bin/grep --color=auto "${@}"
+}
 
-. $HOME/.asdf/completions/asdf.bash
+# fgrep with colours by default
+# Arguments: $@ -> what to match
+function fgrep()
+{
+    /usr/bin/fgrep --color=auto "${@}"
+}
+
+# egrep with colours by default
+# Arguments: $@ -> what to match
+function egrep()
+{
+    /usr/bin/egrep --color=auto "${@}"
+}
+
+#team_modules_path=/Users/adinapoli/Code/platapi-team-modules
+#source $team_modules_path/00_initialize.sh
+#load-user-modules $team_modules_path
+
+export GREP_OPTIONS='--color=always' 
+
+alias python=python3
+alias pip=pip3
+
+### History Settings
+setopt extended_history       # record timestamp of command in HISTFILE
+setopt hist_ignore_all_dups   # ignore duplicated commands history list
+setopt hist_verify            # show command with history expansion to user before running it
+setopt share_history          # share command history data
+
+export HISTFILE=~/.zsh_history
+export HISTFILESIZE=1000000000
+export HISTSIZE=1000000000
+export HISTTIMEFORMAT="[%F %T] "
+
+## Up/Down Arrow History Search
+autoload -U up-line-or-beginning-search
+autoload -U down-line-or-beginning-search
+zle -N up-line-or-beginning-search
+zle -N down-line-or-beginning-search
+bindkey "^[[A" up-line-or-beginning-search # Up
+bindkey "^[[B" down-line-or-beginning-search # Down
